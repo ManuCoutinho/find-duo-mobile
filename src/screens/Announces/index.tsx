@@ -1,4 +1,5 @@
 import { TouchableOpacity, View, Image, FlatList, Text } from 'react-native'
+import { useEffect, useState } from 'react'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Entypo } from '@expo/vector-icons'
@@ -6,18 +7,20 @@ import { GameParams } from '../../@types/navigation'
 import { Background } from '../../components/Background'
 import { Heading } from '../../components/Heading'
 import { AnnounceCard } from '../../components/AnnounceCard'
+import { Modal } from '../../components/Modal'
 
+import { Ad } from '../../components/AnnounceCard/types'
 import { THEME } from '../../theme'
 import { styles } from './styles'
 
 import logoImg from '../../assets/logo-nlw-esports.png'
-import { useEffect, useState } from 'react'
-import { Ad } from '../../components/AnnounceCard/types'
 
 export function Announces() {
-  const [ad, setAd] = useState<Ad[]>()
   const navigation = useNavigation()
   const route = useRoute()
+  const [ad, setAd] = useState<Ad[]>()
+  const [discordSelected, setDiscordSelected] = useState('')
+
   const game = route.params as GameParams
   const containerStyle =
     ad?.length === 0
@@ -30,7 +33,13 @@ export function Announces() {
       .then((response) => response.json())
       .then((data) => setAd(data))
   }, [])
-  console.log(containerStyle)
+
+  async function getDiscordByAd(adsId: string) {
+    await fetch(`http://192.168.100.216:4800/ads/${adsId}/discord`)
+      .then((response) => response.json())
+      .then((data) => setDiscordSelected(data?.discord))
+  }
+
   return (
     <Background>
       <SafeAreaView style={styles.container}>
@@ -57,7 +66,7 @@ export function Announces() {
           renderItem={({ item }) => (
             <AnnounceCard
               data={item}
-              onConnect={() => console.log('abriu modal')}
+              onConnect={() => getDiscordByAd(item.id)}
             />
           )}
           contentContainerStyle={containerStyle}
@@ -69,6 +78,11 @@ export function Announces() {
               Não há anúncios para este game :(
             </Text>
           )}
+        />
+        <Modal
+          visible={discordSelected.length > 0}
+          discord={discordSelected}
+          onClose={() => setDiscordSelected('')}
         />
       </SafeAreaView>
     </Background>
