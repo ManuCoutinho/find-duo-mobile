@@ -12,10 +12,11 @@ import { styles } from './styles';
 export function Home() {
   const [games, setGames] = useState<GameCardTypes[]>([])
   const navigation = useNavigation()
+  
   useEffect(() => {
-    fetch('http://192.168.100.216:4800/games')
-      .then(response => response.json())
-      .then(data => setGames(data))
+    fetch(`${process.env.BACKEND_ENDPOINT}/games`)
+      .then((response) => response.json())
+      .then((data) => setGames(data))
   }, [])
 
   return (

@@ -9,7 +9,6 @@ export async function getPushNotificationToken() {
 
   if (granted) {
     const pushToken = await Notifications.getExpoPushTokenAsync()
-    console.log('EU SOU O TOKEN', pushToken.data)
 
     return pushToken.data
   }

@@ -29,13 +29,13 @@ export function Announces() {
       ? styles.oneCard
       : styles.contentList
   useEffect(() => {
-    fetch(`http://192.168.100.216:4800/games/${game.id}/ads`)
+    fetch(`${process.env.BACKEND_ENDPOINT}/games/${game.id}/ads`)
       .then((response) => response.json())
       .then((data) => setAd(data))
   }, [])
 
   async function getDiscordByAd(adsId: string) {
-    await fetch(`http://192.168.100.216:4800/ads/${adsId}/discord`)
+    await fetch(`${process.env.BACKEND_ENDPOINT}/ads/${adsId}/discord`)
       .then((response) => response.json())
       .then((data) => setDiscordSelected(data?.discord))
   }
