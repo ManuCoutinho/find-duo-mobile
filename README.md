@@ -1,4 +1,6 @@
-
+<div align="center">
+<img alt="preview" src="assets/preview.gif" style='height:450px'>
+</div>
 <h1 align="center">Find Duo Mobile</h1>
 
 <p align="center">
